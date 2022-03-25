@@ -9,6 +9,12 @@ import {
 
 import NFTMarketplace from '../artifacts/contracts/NFTMarketplace.sol/NFTMarketplace.json'
 
+let rpcEndpoint = null
+
+if (process.env.NEXT_PUBLIC_WORKSPACE_URL) {
+  rpcEndpoint = process.env.NEXT_PUBLIC_WORKSPACE_URL
+}
+
 export default function Home() {
   const [nfts, setNfts] = useState([])
   const [loadingState, setLoadingState] = useState('not-loaded')
@@ -17,7 +23,7 @@ export default function Home() {
   }, [])
   async function loadNFTs() {
     /* create a generic provider and query for unsold market items */
-    const provider = new ethers.providers.JsonRpcProvider()
+    const provider = new ethers.providers.JsonRpcProvider(rpcEndpoint)
     const contract = new ethers.Contract(marketplaceAddress, NFTMarketplace.abi, provider)
     const data = await contract.fetchMarketItems()
 
